@@ -1,0 +1,50 @@
+services:
+  app:
+    container_name: appbank
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "50052:50051"
+    volumes:
+      - .:/go/src
+    environment:
+      - GO_ENV=development
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - db
+    command: ["tail", "-f", "/dev/null"]
+
+  db:
+    image: postgres:13.22-alpine3.21 
+    container_name: postgres-db
+    restart: always
+    tty: true
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: codebank
+      POSTGRES_USER: postgres
+    ports:
+      - "5432:5432"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@user.com
+      PGADMIN_DEFAULT_PASSWORD: 123456
+    ports:
+      - "9000:80"
+    depends_on:
+      - db
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  pgdata:

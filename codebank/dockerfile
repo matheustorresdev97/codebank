@@ -1,0 +1,26 @@
+FROM golang:1.23-bookworm
+
+WORKDIR /go/src
+
+ENV CGO_ENABLED=1 \
+    GO111MODULE=on \
+    PATH="/go/bin:${PATH}"
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    protobuf-compiler \
+    librdkafka-dev \
+    wget \
+    ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest && \
+    go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest && \
+    go install github.com/spf13/cobra-cli@latest
+
+RUN wget https://github.com/ktr0731/evans/releases/download/v0.10.11/evans_linux_amd64.tar.gz -O evans.tar.gz && \
+    tar -xzf evans.tar.gz && \
+    mv evans /usr/local/bin/ && \
+    rm -f evans.tar.gz
+
+CMD ["tail", "-f", "/dev/null"]
