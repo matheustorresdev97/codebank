@@ -2,11 +2,11 @@ syntax = "proto3";
 package payment;
 option go_package = "grpc/pb";
 
-service PaymentService {
-  rpc Payment(PaymentRequest) returns (PaymentResponse) {}
-}
+import "google/protobuf/empty.proto";
 
-message PaymentResponse {}
+service PaymentService {
+  rpc Payment(PaymentRequest) returns (google.protobuf.Empty) {}
+}
 
 message PaymentRequest {
   message CreditCard {
