@@ -1,4 +1,3 @@
-// app/products/page.tsx
 import {
   Button,
   Card,
@@ -8,10 +7,21 @@ import {
   Typography,
 } from "@mui/material";
 import { Grid } from "@mui/material";
-import { products } from "./models"; // Verifique se este caminho está correto
+import { Product } from "./models";
 import Link from "next/link";
 
-export default function ProductListPage() {
+export default async function ProductListPage() {
+
+  const res = await fetch("http://localhost:3000/api/products", {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error("Erro ao buscar produtos");
+  }
+
+  const products: Product[] = await res.json();
+  
   return (
     <div>
       <Typography component="h1" variant="h3" color="textPrimary" gutterBottom>
@@ -31,10 +41,10 @@ export default function ProductListPage() {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button 
-                  size="small" 
-                  color="primary" 
-                  component={Link} 
+                <Button
+                  size="small"
+                  color="primary"
+                  component={Link}
                   href={`/products/${product.slug}`}
                 >
                   Detalhes

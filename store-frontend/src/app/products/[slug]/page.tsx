@@ -1,4 +1,3 @@
-import { Product, products } from "../../models";
 import {
   Button,
   Card,
@@ -10,15 +9,22 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { products, type Product } from "@/app/models";
 
-export default function ProductDetailPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const product: Product | undefined = products.find(
-    (p) => p.slug === params.slug
-  );
+interface ProductDetailPageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export async function generateStaticParams() {
+  return products.map((p) => ({
+    slug: p.slug,
+  }));
+}
+
+export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
+  const { slug } = await params;
+
+  const product = products.find((p) => p.slug === slug);
 
   if (!product) {
     notFound();
@@ -41,7 +47,7 @@ export default function ProductDetailPage({
             Comprar
           </Button>
         </CardActions>
-        <CardMedia style={{ paddingTop: "56%" }} image={product.image_url} />
+        <CardMedia sx={{ paddingTop: "56%" }} image={product.image_url} />
         <CardContent>
           <Typography variant="body2" color="textSecondary" component="p">
             {product.description}
@@ -51,3 +57,7 @@ export default function ProductDetailPage({
     </div>
   );
 }
+
+export const revalidate = 120;
+
+export const dynamicParams = true;

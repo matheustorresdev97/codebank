@@ -6,4 +6,4 @@ fi
 
 npm install
 
-npm run dev
+exec npm run dev
