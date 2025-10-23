@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ ! -f ".env" ]; then
+    cp .env.example .env
+fi
+
+npm install
+
+exec npm run start:dev

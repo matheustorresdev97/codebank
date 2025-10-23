@@ -1,0 +1,9 @@
+services:
+  app:
+    build: .
+    entrypoint: ./.docker/entrypoint.sh
+    container_name: store-api-app
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/home/node/app
