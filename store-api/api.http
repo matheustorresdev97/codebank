@@ -13,7 +13,7 @@ Content-Type: application/json
 GET http://localhost:3000/products
 
 ###
-GET http://localhost:3000/products/fdeb7fc6-240a-4d57-b1a8-d78c4be20d64
+GET http://localhost:3000/products/tv-32
 
 ###
 PATCH http://localhost:3000/products/fdeb7fc6-240a-4d57-b1a8-d78c4be20d64
@@ -26,3 +26,32 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:3000/products/fdeb7fc6-240a-4d57-b1a8-d78c4be20d64
+
+## ORDERS ####
+
+###
+GET http://localhost:3000/orders
+
+###
+GET http://localhost:3000/orders/64be9c0d-0079-442b-8bd7-2de24c1cf322
+
+
+###
+POST http://localhost:3000/orders
+Content-Type: application/json
+
+{
+    "credit_card": {
+      "number": "1111111111111103",
+      "name": "Matheus Torres",
+      "expiration_month": 12,
+      "expiration_year": 2025,
+      "cvv": "123"
+    },
+       "items":  [
+      {
+          "quantity": 2, 
+          "product_id": "fdeb7fc6-240a-4d57-b1a8-d78c4be20d64"
+      }
+   ]
+}
