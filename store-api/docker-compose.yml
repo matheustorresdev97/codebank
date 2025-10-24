@@ -1,9 +1,43 @@
 services:
   app:
     build: .
-    entrypoint: ./.docker/entrypoint.sh
     container_name: store-api-app
+    entrypoint: ./.docker/entrypoint.sh
     ports:
-      - 3000:3000
+      - "3000:3000"
     volumes:
       - .:/home/node/app
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgres://postgres:store@db:5432/store
+    tty: true
+
+  db:
+    build: .docker/postgres
+    container_name: store-api-db
+    restart: always
+    tty: true
+    volumes:
+       - ./.docker/dbdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: store
+      POSTGRES_DB: store
+      POSTGRES_USER: postgres
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: store-api-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@user.com
+      PGADMIN_DEFAULT_PASSWORD: 123456
+    ports:
+      - "9000:80"
+    depends_on:
+      - db
+
+volumes:
+  pgdata:
