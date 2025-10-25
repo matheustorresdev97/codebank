@@ -2,9 +2,14 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { EntityNotFoundExceptionFilter } from './exceptions-filters/entity-not-found.exception-filter';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import { useContainer } from 'class-validator';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
+
+    useContainer(app.select(AppModule), { fallbackOnErrors: true });
+
+
   app.useGlobalFilters(
     new EntityNotFoundExceptionFilter()
   );

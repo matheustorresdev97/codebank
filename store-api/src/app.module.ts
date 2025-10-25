@@ -5,6 +5,8 @@ import { AppService } from './app.service';
 import { ProductsModule } from './products/products.module';
 import { ConfigModule } from '@nestjs/config';
 import { OrdersModule } from './orders/orders.module';
+import { ExistsRule } from './validators/exists.rule';
+
 
 @Module({
   imports: [
@@ -18,13 +20,16 @@ import { OrdersModule } from './orders/orders.module';
       database: process.env.DB_NAME || 'store',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       migrations: [__dirname + '/migrations/*{.ts,.js}'],
-      synchronize: false, // IMPORTANTE: false em produção
+      synchronize: false,
       logging: true,
     }),
     ProductsModule,
     OrdersModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    ExistsRule
+  ],
 })
 export class AppModule {}

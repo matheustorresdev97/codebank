@@ -5,8 +5,9 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import { EntityNotFoundError } from 'typeorm';
-import { AppDataSource } from '../data-source'; // ajuste o caminho
+import { Injectable } from '@nestjs/common';
+import { DataSource } from 'typeorm';
+import { InjectDataSource } from '@nestjs/typeorm';
 
 export function Exists(
   entityClass: any,
@@ -25,25 +26,26 @@ export function Exists(
   };
 }
 
+@Injectable()
 @ValidatorConstraint({ name: 'Exists', async: true })
 export class ExistsRule implements ValidatorConstraintInterface {
+  constructor(@InjectDataSource() private readonly dataSource: DataSource) {}
+
   async validate(value: string, args: ValidationArguments) {
+
     if (!value) return false;
 
     try {
       const [entityClass, field] = args.constraints;
-      const repository = AppDataSource.getRepository(entityClass); // ⚠️ aqui usamos a instância do DataSource
+      const repository = this.dataSource.getRepository(entityClass);
+
       const result = await repository.findOne({
         where: { [field]: value },
       });
 
-      if (!result) {
-        throw new EntityNotFoundError(entityClass, value);
-      }
-
-      return true;
+      return !!result;
     } catch (e) {
-      console.error(e);
+      console.error('💥 Erro no validator Exists:', e);
       return false;
     }
   }

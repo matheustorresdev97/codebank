@@ -16,7 +16,7 @@ GET http://localhost:3000/products
 GET http://localhost:3000/products/tv-32
 
 ###
-PATCH http://localhost:3000/products/fdeb7fc6-240a-4d57-b1a8-d78c4be20d64
+PATCH http://localhost:3000/products/25c0debd-4b8c-475f-b033-a2d0ab9beaad
 Content-Type: application/json
 
 {
@@ -51,7 +51,7 @@ Content-Type: application/json
        "items":  [
       {
           "quantity": 2, 
-          "product_id": "fdeb7fc6-240a-4d57-b1a8-d78c4be20d64"
+          "product_id": "25c0debd-4b8c-475f-b033-a2d0ab9beaad"
       }
    ]
 }
