@@ -9,26 +9,36 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { products, type Product } from "@/app/models";
+import { type Product } from "@/app/models";
 
 interface ProductDetailPageProps {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
+  const res = await fetch(`${process.env.STORE_API_URL}/products`);
+  const products: Product[] = await res.json();
+
   return products.map((p) => ({
     slug: p.slug,
   }));
 }
 
-export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
+// Página de detalhes
+export default async function ProductDetailPage({
+  params,
+}: ProductDetailPageProps) {
   const { slug } = await params;
 
-  const product = products.find((p) => p.slug === slug);
+  const res = await fetch(`${process.env.STORE_API_URL}/products/${slug}`, {
+    next: { revalidate: 120 }, // ISR — revalida a cada 2 minutos
+  });
 
-  if (!product) {
+  if (!res.ok) {
     notFound();
   }
+
+  const product: Product = await res.json();
 
   return (
     <div>
@@ -59,5 +69,4 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 }
 
 export const revalidate = 120;
-
 export const dynamicParams = true;

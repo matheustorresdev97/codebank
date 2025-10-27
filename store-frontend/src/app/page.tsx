@@ -11,8 +11,7 @@ import { Product } from "./models";
 import Link from "next/link";
 
 export default async function ProductListPage() {
-
-  const res = await fetch("http://localhost:3000/api/products", {
+  const res = await fetch(`${process.env.STORE_API_URL}/products`, {
     cache: "no-store",
   });
 

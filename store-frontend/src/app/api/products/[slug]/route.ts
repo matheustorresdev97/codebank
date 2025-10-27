@@ -1,4 +1,3 @@
-import { products } from "@/app/models";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -7,14 +6,23 @@ export async function GET(
 ) {
   const { slug } = await params;
 
-  const product = products.find((p) => p.slug === slug);
+  try {
+    const res = await fetch(`${process.env.STORE_API_URL}/products/${slug}`);
 
-  if (!product) {
+    if (!res.ok) {
+      return NextResponse.json(
+        { message: "Product not found" },
+        { status: 404 }
+      );
+    }
+
+    const product = await res.json();
+    return NextResponse.json(product);
+  } catch (error) {
+    console.error("Erro ao buscar produto:", error);
     return NextResponse.json(
-      { message: "Product not found" },
-      { status: 404 }
+      { message: "Erro interno ao buscar produto" },
+      { status: 500 }
     );
   }
-
-  return NextResponse.json(product);
 }
