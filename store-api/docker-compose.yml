@@ -9,6 +9,8 @@ services:
       - .:/home/node/app
     depends_on:
       - db
+    extra_hosts: 
+      - 'host.docker.internal:172.17.0.1'
     environment:
       - DATABASE_URL=postgres://postgres:store@db:5432/store
     tty: true

@@ -21,10 +21,13 @@
     "typeorm": "ts-node ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.14.0",
+    "@grpc/proto-loader": "^0.8.0",
     "@nestjs/common": "^11.1.7",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.1.7",
     "@nestjs/mapped-types": "*",
+    "@nestjs/microservices": "^11.1.8",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/typeorm": "^11.0.0",
     "class-transformer": "^0.5.1",

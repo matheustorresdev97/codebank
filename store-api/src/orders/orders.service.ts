@@ -5,12 +5,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
 import { In, Repository } from 'typeorm';
 import { Product } from '../products/entities/product.entity';
+import { PaymentService } from './payment/payment.service';
 
 @Injectable()
 export class OrdersService {
   constructor(
     @InjectRepository(Order) private orderRepo: Repository<Order>,
     @InjectRepository(Product) private productRepo: Repository<Product>,
+    private paymentService: PaymentService,
   ) {}
 
   async create(createOrderDto: CreateOrderDto) {
@@ -29,7 +31,20 @@ export class OrdersService {
       }
     });
 
-    return this.orderRepo.save(order);
+    const newOrder = await this.orderRepo.save(order);
+    await this.paymentService.payment({
+      creditCard: {
+        name: order.credit_card.name,
+        number: order.credit_card.number,
+        expirationMonth: order.credit_card.expiration_month,
+        expirationYear: order.credit_card.expiration_year,
+        cvv: order.credit_card.cvv,
+      },
+      amount: order.total,
+      store: process.env.STORE_NAME!,
+      description: `Produtos: ${products.map((p) => p.name).join(', ')}`,
+    });
+    return newOrder;
   }
 
   findAll() {
