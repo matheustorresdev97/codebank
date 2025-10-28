@@ -2,10 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Order } from './entities/order.entity';
+import { Order, OrderStatus } from './entities/order.entity';
 import { In, Repository } from 'typeorm';
 import { Product } from '../products/entities/product.entity';
 import { PaymentService } from './payment/payment.service';
+import { Connection } from 'typeorm';
 
 @Injectable()
 export class OrdersService {
@@ -13,6 +14,7 @@ export class OrdersService {
     @InjectRepository(Order) private orderRepo: Repository<Order>,
     @InjectRepository(Product) private productRepo: Repository<Product>,
     private paymentService: PaymentService,
+    private connection: Connection,
   ) {}
 
   async create(createOrderDto: CreateOrderDto) {
@@ -25,30 +27,56 @@ export class OrdersService {
     });
 
     order.items.forEach((item) => {
-      const product = products.find((p) => p.id === item.product_id);
-      if (product) {
-        item.price = product.price;
+      const product = products.find(
+        (product) => product.id === item.product_id,
+      );
+      if (!product) {
+        throw new Error(`Product with id ${item.product_id} not found`);
       }
+      item.price = product.price;
     });
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
-    const newOrder = await this.orderRepo.save(order);
-    await this.paymentService.payment({
-      creditCard: {
-        name: order.credit_card.name,
-        number: order.credit_card.number,
-        expirationMonth: order.credit_card.expiration_month,
-        expirationYear: order.credit_card.expiration_year,
-        cvv: order.credit_card.cvv,
-      },
-      amount: order.total,
-      store: process.env.STORE_NAME!,
-      description: `Produtos: ${products.map((p) => p.name).join(', ')}`,
-    });
-    return newOrder;
+    try {
+      const newOrder = await queryRunner.manager.save(order);
+      await this.paymentService.payment({
+        creditCard: {
+          name: order.credit_card.name,
+          number: order.credit_card.number,
+          expirationMonth: order.credit_card.expiration_month,
+          expirationYear: order.credit_card.expiration_year,
+          cvv: order.credit_card.cvv,
+        },
+        amount: order.total,
+        store: process.env.STORE_NAME!,
+        description: `Produtos: ${products.map((p) => p.name).join(', ')}`,
+      });
+      await queryRunner.manager.update(
+        Order,
+        { id: newOrder.id },
+        {
+          status: OrderStatus.Approved,
+        },
+      );
+      console.log('Payment approved', newOrder);
+      await queryRunner.commitTransaction();
+            console.log('Payment approved', newOrder);
+      return this.orderRepo.findOne({ where: { id: newOrder.id }, relations: ['items'] });
+    } catch (e) {
+      await queryRunner.rollbackTransaction();
+      console.log(e.name);
+      throw e;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
-  findAll() {
-    return `This action returns all orders`;
+  async findAll() {
+    const orders = await this.orderRepo.find();
+    console.log(orders.length);
+    return orders;
   }
 
   findOne(id: number) {

@@ -14,17 +14,15 @@ import { PaymentService } from './payment/payment.service';
   imports: [
     TypeOrmModule.forFeature([Order, OrderItem, Product]),
     ValidatorsModule,
-    ClientsModule.registerAsync([
+    ClientsModule.register([
       {
         name: 'PAYMENT_PACKAGE',
-        useFactory: () => ({
-          transport: Transport.GRPC,
-          options: {
-            url: process.env.GRPC_HOST,
-            package: 'payment',
-            protoPath: join(__dirname, 'proto/payment.proto'),
-          },
-        }),
+        transport: Transport.GRPC,
+        options: {
+          url: process.env.GRPC_HOST || 'localhost:50052',
+          package: 'payment',
+          protoPath: join(__dirname, 'proto/payment.proto'),
+        },
       },
     ]),
   ],

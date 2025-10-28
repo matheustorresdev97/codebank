@@ -10,9 +10,11 @@ services:
     depends_on:
       - db
     extra_hosts: 
-      - 'host.docker.internal:172.17.0.1'
+      - "host.docker.internal:host-gateway"
     environment:
       - DATABASE_URL=postgres://postgres:store@db:5432/store
+      - GRPC_HOST=host.docker.internal:5005
+      - PAYMENT_GRPC_URL=host.docker.internal:50052
     tty: true
 
   db:
@@ -37,7 +39,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@user.com
       PGADMIN_DEFAULT_PASSWORD: 123456
     ports:
-      - "9000:80"
+      - "9001:80"
     depends_on:
       - db
 
