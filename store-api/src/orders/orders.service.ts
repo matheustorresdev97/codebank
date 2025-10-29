@@ -7,6 +7,8 @@ import { In, Repository } from 'typeorm';
 import { Product } from '../products/entities/product.entity';
 import { PaymentService } from './payment/payment.service';
 import { Connection } from 'typeorm';
+import { validate as uuidValidate } from 'uuid';
+
 
 @Injectable()
 export class OrdersService {
@@ -79,15 +81,18 @@ export class OrdersService {
     return orders;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} order`;
+  findOne(id: string) {
+    return this.orderRepo.findOneOrFail({
+      where: { id },
+      relations: ['items', 'items.product'],
+    });
   }
 
-  update(id: number, updateOrderDto: UpdateOrderDto) {
+  update(id: string, updateOrderDto: UpdateOrderDto) {
     return `This action updates a #${id} order`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} order`;
   }
 }

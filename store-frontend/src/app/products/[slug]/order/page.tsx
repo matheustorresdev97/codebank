@@ -49,7 +49,6 @@ export default async function OrderPage({ params }: OrderPageProps) {
                 Pague com cartão de crédito
             </Typography>
 
-            {/* Formulário separado como Client Component */}
             <OrderForm product={product} />
         </Box>
     );
