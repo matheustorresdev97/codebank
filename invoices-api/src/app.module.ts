@@ -4,7 +4,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { ExistsRule } from './validators/exists.rule';
-
+import { InvoicesModule } from './invoices/invoices.module';
+import { ValidatorsModule } from './validators/validators.module';
 
 @Module({
   imports: [
@@ -20,12 +21,11 @@ import { ExistsRule } from './validators/exists.rule';
       migrations: [__dirname + '/migrations/*{.ts,.js}'],
       synchronize: false,
       logging: true,
-    })
+    }),
+    InvoicesModule,
+    ValidatorsModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    ExistsRule
-  ],
+  providers: [AppService],
 })
 export class AppModule {}

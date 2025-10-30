@@ -1,4 +1,6 @@
 import { DataSource } from 'typeorm';
+import { CreditCard } from './invoices/entities/credit-card.entity';
+import { Invoice } from './invoices/entities/invoice.entity';
 
 export const AppDataSource = new DataSource({
     type: 'postgres',
@@ -7,7 +9,7 @@ export const AppDataSource = new DataSource({
     username: process.env.DB_USER || 'postgres',
     password: process.env.DB_PASSWORD || 'invoices',
     database: process.env.DB_NAME || 'invoices',
-    entities: [],
+    entities: [CreditCard, Invoice],
     migrations: ['./src/migrations/*.ts'],
     synchronize: false,
     logging: true,

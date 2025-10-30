@@ -1,57 +1,17 @@
-### PRODUCTS
-POST http://localhost:3000/products
+###
+GET http://localhost:3002/credit-cards
+
+
+###
+POST http://localhost:3002/credit-cards
 Content-Type: application/json
 
 {
-    "name": "tv 32",
-    "description": "Mussum Ipsum, cacilds vidis litro abertis. Posuere libero varius. Nullam a nisl ut ante blandit hendrerit. Aenean sit amet nisi. In elementis mé pra quem é amistosis quis leo. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis. Cevadis im ampola pa arma uma pindureta.",
-    "image_url": "https://images.unsplash.com/photo-1570831739435-6601aa3fa4fb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218fHx8fHx8fHwxNjIzMzQ0NjY2&ixlib=rb-1.2.1&q=80&w=1080&utm_source=unsplash_source&utm_medium=referral&utm_campaign=api-credit",
-    "price": 1500.99
+    "name": "Matheus Torres",
+    "number": "1111111111111103"
 }
 
-###
-GET http://localhost:3000/products
+## 1111111111111103
 
 ###
-GET http://localhost:3000/products/tv-32
-
-###
-PATCH http://localhost:3000/products/25c0debd-4b8c-475f-b033-a2d0ab9beaad
-Content-Type: application/json
-
-{
-    "name": "tv 32 alterada",
-    "price": 1500.80
-}
-
-###
-DELETE http://localhost:3000/products/fdeb7fc6-240a-4d57-b1a8-d78c4be20d64
-
-## ORDERS ####
-
-###
-GET http://localhost:3000/orders
-
-###
-GET http://localhost:3000/orders/64be9c0d-0079-442b-8bd7-2de24c1cf322
-
-
-###
-POST http://localhost:3000/orders
-Content-Type: application/json
-
-{
-    "credit_card": {
-      "number": "1111111111111103",
-      "name": "Matheus Torres",
-      "expiration_month": 12,
-      "expiration_year": 2025,
-      "cvv": "123"
-    },
-       "items":  [
-      {
-          "quantity": 1, 
-          "product_id": "25c0debd-4b8c-475f-b033-a2d0ab9beaad"
-      }
-   ]
-}
+GET http://localhost:3002/credit-cards/1111111111111103/invoices

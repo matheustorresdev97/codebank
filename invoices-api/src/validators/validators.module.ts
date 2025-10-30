@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ExistsRule } from './exists.rule';
+import { NotExistsRule } from './not-exists.rule';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([])], 
-  providers: [ExistsRule],
-  exports: [ExistsRule],
+  providers: [ExistsRule, NotExistsRule],
+  exports: [ExistsRule, NotExistsRule],
 })
 export class ValidatorsModule {}

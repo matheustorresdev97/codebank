@@ -15,6 +15,7 @@ services:
       - DATABASE_URL=postgres://postgres:invoices@db:5432/invoices
       - GRPC_HOST=host.docker.internal:5005
       - PAYMENT_GRPC_URL=host.docker.internal:50052
+      - KAFKA_BROKER=host.docker.internal:9094
     tty: true
 
   db:
