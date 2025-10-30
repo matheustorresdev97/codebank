@@ -1,0 +1,47 @@
+services:
+  app:
+    build: .
+    container_name: invoices-api-app
+    entrypoint: ./.docker/entrypoint.sh
+    ports:
+      - "3002:3000"
+    volumes:
+      - .:/home/node/app
+    depends_on:
+      - db
+    extra_hosts: 
+      - "host.docker.internal:host-gateway"
+    environment:
+      - DATABASE_URL=postgres://postgres:invoices@db:5432/invoices
+      - GRPC_HOST=host.docker.internal:5005
+      - PAYMENT_GRPC_URL=host.docker.internal:50052
+    tty: true
+
+  db:
+    build: .docker/postgres
+    container_name: invoices-api-db
+    restart: always
+    tty: true
+    volumes:
+       - ./.docker/dbdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: invoices
+      POSTGRES_DB: invoices
+      POSTGRES_USER: postgres
+    ports:
+      - "5434:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: invoices-api-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@user.com
+      PGADMIN_DEFAULT_PASSWORD: 123456
+    ports:
+      - "9002:80"
+    depends_on:
+      - db
+
+volumes:
+  pgdata:
