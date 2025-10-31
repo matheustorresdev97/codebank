@@ -42,7 +42,7 @@ Content-Type: application/json
 
 {
     "credit_card": {
-      "number": "1111111111111103",
+      "number": "1111111111111113",
       "name": "Matheus Torres",
       "expiration_month": 12,
       "expiration_year": 2025,
@@ -51,7 +51,7 @@ Content-Type: application/json
        "items":  [
       {
           "quantity": 1, 
-          "product_id": "25c0debd-4b8c-475f-b033-a2d0ab9beaad"
+          "product_id": "60ac5e80-03e9-4ab8-9ae5-969ba7422735"
       }
    ]
 }

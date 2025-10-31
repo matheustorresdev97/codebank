@@ -23,9 +23,9 @@ async function bootstrap() {
         brokers: [process.env.KAFKA_HOST ?? 'localhost:9094'],
       },
       consumer: {
-          groupId:
+        groupId:
           !process.env.KAFKA_CONSUMER_GROUP_ID ||
-          process.env.KAFKA_CONSUMER_GROUP_ID === ''
+            process.env.KAFKA_CONSUMER_GROUP_ID === ''
             ? 'my-consumer-' + Math.random()
             : process.env.KAFKA_CONSUMER_GROUP_ID,
       },

@@ -13,8 +13,7 @@ services:
       - "host.docker.internal:host-gateway"
     environment:
       - DATABASE_URL=postgres://postgres:store@db:5432/store
-      - GRPC_HOST=host.docker.internal:5005
-      - PAYMENT_GRPC_URL=host.docker.internal:50052
+      - GRPC_HOST=host.docker.internal:50052
     tty: true
 
   db:

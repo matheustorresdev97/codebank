@@ -23,7 +23,7 @@ interface PaymentGrpcRequest {
     name: string;
     expirationMonth: number;
     expirationYear: number;
-    cvv: number; 
+    cvv: number;
   };
   amount: number;
   description: string;
@@ -38,7 +38,7 @@ interface PaymentGrpcService {
 export class PaymentService implements OnModuleInit {
   private paymentGrpcService: PaymentGrpcService;
 
-  constructor(@Inject('PAYMENT_PACKAGE') private clientGrpc: ClientGrpc) {}
+  constructor(@Inject('PAYMENT_PACKAGE') private clientGrpc: ClientGrpc) { }
 
   onModuleInit() {
     this.paymentGrpcService =
@@ -77,10 +77,10 @@ export class PaymentService implements OnModuleInit {
       );
       return result;
     } catch (e) {
+      console.error('❌ Payment gRPC failed', e);
       throw new RpcException({
         code: e.code || 'UNKNOWN',
         message: e.message || 'Payment service error',
-        details: e.details,
       });
     }
   }

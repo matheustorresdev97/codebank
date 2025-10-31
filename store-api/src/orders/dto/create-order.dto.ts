@@ -32,7 +32,7 @@ class CreditCardDto {
     @MinCallback(() => new Date().getMonth() + 1)
     @IsInt()
     @IsNotEmpty()
-    expiration_month: number;
+    expiration_month: number; //vazio, inteiro, new Date()
 
     @MinCallback(() => new Date().getFullYear())
     @IsInt()

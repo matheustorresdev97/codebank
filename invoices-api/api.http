@@ -1,17 +1,16 @@
 ###
 GET http://localhost:3002/credit-cards
 
-
 ###
 POST http://localhost:3002/credit-cards
 Content-Type: application/json
 
 {
     "name": "Matheus Torres",
-    "number": "1111111111111103"
+    "number": "1111111111111115"
 }
 
-## 1111111111111103
+## 1111111111111113
 
 ###
-GET http://localhost:3002/credit-cards/1111111111111103/invoices
+GET http://localhost:3002/credit-cards/1111111111111113/invoices

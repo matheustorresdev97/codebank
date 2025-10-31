@@ -10,7 +10,7 @@ import { KafkaCreateInvoiceDto } from './dto/create-invoice.dto';
 
 @Controller('credit-cards/:creditCardNumber/invoices')
 export class InvoicesController {
-  constructor(private readonly invoicesService: InvoicesService) {}
+  constructor(private readonly invoicesService: InvoicesService) { }
 
   @MessagePattern('payments')
   create(@Payload(new ValidationPipe()) message: KafkaCreateInvoiceDto) {

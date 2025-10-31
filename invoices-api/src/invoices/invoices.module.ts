@@ -8,9 +8,7 @@ import { CreditCard } from './entities/credit-card.entity';
 import { Invoice } from './entities/invoice.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([CreditCard, Invoice]),
-  ],
+  imports: [TypeOrmModule.forFeature([CreditCard, Invoice])],
   controllers: [InvoicesController, CreditCardsController],
   providers: [InvoicesService, CreditCardsService],
 })
